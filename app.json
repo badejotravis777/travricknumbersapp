@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "Travrick Numbers",
+    "slug": "travrick-numbers",
+    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "sdkVersion": "52.0.0" 
+  }
+}
