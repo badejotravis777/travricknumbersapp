@@ -14,7 +14,7 @@ const WelcomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3f3f3' },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#007BFF' },
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
   button: { padding: 10, backgroundColor: '#ff9900', borderRadius: 5 },
   buttonText: { color: '#fff', fontWeight: 'bold' },

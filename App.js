@@ -1,12 +1,15 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import 'react-native-url-polyfill/auto';
 import SplashScreen from './screens/SplashScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import SignupScreen from './screens/SignupScreen';
 import LoginScreen from './screens/LoginScreen';
 import TutorialScreen from './screens/TutorialScreen';
 import GameModeScreen from './screens/GameModeScreen';
+import LogoutScreen from './screens/Logoutscreens';
+
 
 const Stack = createStackNavigator();
 
@@ -30,6 +33,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Tutorial" component={TutorialScreen} />
         <Stack.Screen name="GameMode" component={GameModeScreen} />
+        <Stack.Screen name="Logout" component={LogoutScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

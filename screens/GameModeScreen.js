@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 
 const GameModeScreen = ({ navigation, route }) => {
-  const { user } = route.params || { user: { username: 'Guest' } }; // Fallback user
+  const { user } = route.params || { user: { username: 'Guest' } };
   const [attempts, setAttempts] = useState(0);
   const [maxAttempts, setMaxAttempts] = useState(30);
   const [userPoints, setUserPoints] = useState(0);
   const [targetNumber, setTargetNumber] = useState(0);
   const [guess, setGuess] = useState('');
-  const [currentMode, setCurrentMode] = useState('Beginner'); // Default mode
+  const [currentMode, setCurrentMode] = useState('Beginner');
+  const [isMenuVisible, setMenuVisible] = useState(false); // Toggle menu visibility
 
   useEffect(() => {
     initializeGame();
@@ -34,7 +42,7 @@ const GameModeScreen = ({ navigation, route }) => {
   };
 
   const handleGuess = () => {
-    const guessNumber = parseInt(guess, 10); // Ensure input is a number
+    const guessNumber = parseInt(guess, 10);
     if (isNaN(guessNumber)) {
       Alert.alert('Invalid Input', 'Please enter a valid number!');
       return;
@@ -43,9 +51,6 @@ const GameModeScreen = ({ navigation, route }) => {
     if (guessNumber === targetNumber) {
       Alert.alert('Congratulations!', 'Correct! You win!');
       setUserPoints((prev) => prev + calculatePoints());
-
-      // Save to history
-      saveGameToHistory(userPoints + calculatePoints(), attempts + 1);
 
       initializeGame();
     } else if (guessNumber < targetNumber) {
@@ -58,16 +63,8 @@ const GameModeScreen = ({ navigation, route }) => {
 
     if (attempts + 1 >= maxAttempts) {
       Alert.alert('Game Over', `The correct number was ${targetNumber}`);
-      // Save to history
-  saveGameToHistory(userPoints, attempts + 1);
-
       initializeGame();
     }
-  };
-
-  const saveGameToHistory = (points, totalAttempts) => {
-    // Placeholder for saving game data
-    console.log(`Game saved: ${points} points, ${totalAttempts} attempts`);
   };
 
   const selectMode = (mode) => {
@@ -83,7 +80,7 @@ const GameModeScreen = ({ navigation, route }) => {
   };
 
   const logOut = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Logout');
   };
 
   return (
@@ -114,16 +111,45 @@ const GameModeScreen = ({ navigation, route }) => {
         <Text style={styles.buttonText}>Submit Guess</Text>
       </TouchableOpacity>
 
-      {/* Navigation Links */}
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Tutorial')}>
-        <Text style={styles.navButtonText}>Go to Tutorial</Text>
+      {/* Hamburger Menu */}
+      <TouchableOpacity
+        style={styles.hamburger}
+        onPress={() => setMenuVisible((prev) => !prev)}
+      >
+        <Text style={styles.hamburgerText}>☰</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('GameHistory')}>
-        <Text style={styles.navButtonText}>View Game History</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={logOut}>
-        <Text style={styles.navButtonText}>Log Out</Text>
-      </TouchableOpacity>
+
+      {isMenuVisible && (
+        <View style={styles.menu}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuVisible(false);
+              navigation.navigate('Tutorial');
+            }}
+          >
+            <Text style={styles.menuText}>Go to Tutorial</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuVisible(false);
+              navigation.navigate('GameHistory');
+            }}
+          >
+            <Text style={styles.menuText}>View Game History</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuVisible(false);
+              logOut();
+            }}
+          >
+            <Text style={styles.menuText}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -133,33 +159,34 @@ const styles = StyleSheet.create({
   welcome: { fontSize: 20, color: '#FFA500', marginBottom: 20 },
   title: { fontSize: 24, color: '#FFA500', fontWeight: 'bold', marginBottom: 20 },
   subTitle: { fontSize: 18, color: '#fff', marginVertical: 10 },
-  button: {
-    padding: 10,
-    backgroundColor: '#FFA500',
-    borderRadius: 5,
-    marginVertical: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
+  button: { backgroundColor: '#FFA500', padding: 10, borderRadius: 5, marginVertical: 5 },
+  buttonText: { color: '#000', fontWeight: 'bold' },
   input: {
+    height: 40,
+    borderColor: '#FFA500',
     borderWidth: 1,
-    borderColor: '#fff',
     borderRadius: 5,
-    padding: 10,
     color: '#fff',
+    paddingHorizontal: 10,
     width: '80%',
     marginVertical: 10,
   },
-  navButton: {
-    padding: 10,
-    marginTop: 10,
-    backgroundColor: '#333',
-    borderRadius: 5,
-    width: '80%',
-    alignItems: 'center',
+  hamburger: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
-  navButtonText: { color: '#FFA500', fontWeight: 'bold' },
+  hamburgerText: { fontSize: 30, color: '#FFA500' },
+  menu: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    backgroundColor: '#333',
+    padding: 10,
+    borderRadius: 5,
+  },
+  menuItem: { marginVertical: 5 },
+  menuText: { color: '#FFA500', fontSize: 16 },
 });
 
 export default GameModeScreen;

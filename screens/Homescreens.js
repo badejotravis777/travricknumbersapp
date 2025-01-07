@@ -1,22 +1,39 @@
-import React, { useContext } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { GameContext } from '../App';
+// Homescreens.js
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const HomeScreen = ({ navigation }) => {
-  const { user } = useContext(GameContext);
-
+export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome, {user.username}!</Text>
-      <Button title="Start Game" onPress={() => navigation.navigate('Game')} />
-      <Button title="View History" onPress={() => navigation.navigate('History')} />
+      <TouchableOpacity onPress={() => navigation.navigate('Tutorial')} style={styles.button}>
+        <Text style={styles.buttonText}>Tutorial</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('GameHistory')} style={styles.button}>
+        <Text style={styles.buttonText}>Game History</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Logout')} style={styles.button}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  welcome: { fontSize: 20, marginBottom: 20 },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#ffa500', // Example button color
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff', // Example text color
+    fontSize: 16,
+  },
 });
-
-export default HomeScreen;

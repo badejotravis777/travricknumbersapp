@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Utility function for email validation
 const validateEmail = (email) => {
@@ -19,7 +20,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Check if fields are empty
     if (!username || !email || !password) {
       Alert.alert('Error', 'All fields are required.');
@@ -32,11 +33,28 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    // Mock authentication (You can replace this with actual API logic)
-    const user = { username, email, points: 100 }; // Example user data
-
-    // Navigate to the Welcome screen, passing user data
-    navigation.navigate('Welcome', { user });
+    try {
+      // Fetch stored user data
+      const storedUser = await AsyncStorage.getItem('user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        // Check credentials
+        if (
+          user.username === username.trim() &&
+          user.email === email.trim() &&
+          user.password === password
+        ) {
+          Alert.alert('Success', 'Login successful.');
+          navigation.navigate('GameMode');
+        } else {
+          Alert.alert('Error', 'Incorrect username, email, or password.');
+        }
+      } else {
+        Alert.alert('Error', 'No account found.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to login. Please try again.');
+    }
   };
 
   const handleSignupNavigation = () => {
@@ -95,7 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1c1c1c', // Light black background
+    backgroundColor: '#1c1c1c',
     paddingHorizontal: 20,
   },
   title: {
@@ -109,7 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: '10%',
     fontSize: 16,
-    color: '#ccc', // Light gray label color
+    color: '#ccc',
   },
   input: {
     width: '80%',
@@ -120,12 +138,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 8,
     color: '#fff',
-    backgroundColor: '#333', // Darker background for inputs
+    backgroundColor: '#333',
   },
   button: {
     width: '80%',
     height: 50,
-    backgroundColor: '#007BFF', // Blue button
+    backgroundColor: '#007BFF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
