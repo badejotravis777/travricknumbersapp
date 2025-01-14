@@ -35,16 +35,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#121212', // Background color you prefer
+    backgroundColor: '#000000',
   },
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 20, // Adds space between the logo and text
+    marginBottom: 20,
   },
   text: {
     fontSize: 24,
-    color: '#FFA500', // Orange color for text
+    color: '#FFA500',
     fontWeight: 'bold',
   },
   spinner: {

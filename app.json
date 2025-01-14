@@ -8,9 +8,9 @@
       "android",
       "web"
     ],
-    "sdkVersion": "52.0.0",
     "plugins": [
-      "expo-video"
+      "expo-video",
+      "expo-asset"
     ]
   }
 }
